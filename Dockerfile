@@ -39,13 +39,15 @@ WORKDIR /usr/src/app
 COPY package.json ./
 
 ENV OPENCV4NODEJS_DISABLE_AUTOBUILD=1
-ENV NODE_PATH=/usr/local/lib/node_modules
+ENV NODE_PATH=/usr/lib/node_modules
+#ls -al /usr/lib/node_modules/@u4/opencv4nodejs/build/Release/
 
 RUN npm install -g @u4/opencv4nodejs
 
 
 # Copy source files
 COPY src/ ./src/
+COPY app.json ./
 
 # Expose the application port (if needed)
 EXPOSE 6777
