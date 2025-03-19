@@ -33,7 +33,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
 RUN npm install -g pm2
 
 # Set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and install dependencies
 COPY package.json ./
@@ -46,7 +46,7 @@ RUN npm install -g @u4/opencv4nodejs
 
 
 # Copy source files
-COPY src/ ./src/
+COPY app.js ./
 COPY app.json ./
 
 # Expose the application port (if needed)
