@@ -39,7 +39,7 @@ WORKDIR /usr/src/app
 COPY package.json ./
 
 ENV OPENCV4NODEJS_DISABLE_AUTOBUILD=1
-ENV  NODE_PATH=$(npm root -g)
+ENV NODE_PATH=/usr/local/lib/node_modules
 
 RUN npm install -g @u4/opencv4nodejs
 
