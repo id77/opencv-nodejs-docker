@@ -1,0 +1,18 @@
+{
+  "name": "opencv-nodejs-docker",
+  "version": "1.0.0",
+  "description": "A project to run OpenCV with Node.js in a Docker container.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "install": "npm install",
+    "pm2": "pm2-runtime start app.json"
+  },
+  "dependencies": {
+    "@u4/opencv4nodejs": "latest"
+  },
+  "engines": {
+    "node": "22.3.0"
+  },
+  "license": "MIT"
+}
