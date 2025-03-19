@@ -8,9 +8,7 @@
     "install": "npm install",
     "pm2": "pm2-runtime start app.json"
   },
-  "dependencies": {
-    "@u4/opencv4nodejs": "latest"
-  },
+  "dependencies": {},
   "engines": {
     "node": "22.3.0"
   },

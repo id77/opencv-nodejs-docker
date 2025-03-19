@@ -6,8 +6,21 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     curl \
     build-essential \
+    cmake \
+    git \
     libopencv-dev \
+    python3 \
+    python3-pip \
+    python3-dev \
     tzdata \
+    pkg-config \
+    libgtk-3-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libtiff-dev \
     && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && dpkg-reconfigure -f noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
@@ -24,7 +37,12 @@ WORKDIR /usr/src/app
 
 # Copy package.json and install dependencies
 COPY package.json ./
-RUN npm install
+
+ENV OPENCV4NODEJS_DISABLE_AUTOBUILD=1
+ENV  NODE_PATH=$(npm root -g)
+
+RUN npm install -g @u4/opencv4nodejs
+
 
 # Copy source files
 COPY src/ ./src/
