@@ -4,7 +4,14 @@
 - Ubuntu
 - NodeJS
 - OpenCV
-- @u4/opencv4nodejs (最新版)
+- @u4/opencv4nodejs
+- onnxruntime-node
+- @tensorflow/tfjs-node
+- @tensorflow/tfjs
+- @tensorflow/tfjs-core
+- long
+- protobufjs
+- seedrandom
 - PM2
 
 ## 支持的架构

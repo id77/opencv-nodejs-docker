@@ -42,7 +42,7 @@ ENV OPENCV4NODEJS_DISABLE_AUTOBUILD=1
 ENV NODE_PATH=/usr/lib/node_modules
 #ls -al /usr/lib/node_modules/@u4/opencv4nodejs/build/Release/
 
-RUN npm install -g @u4/opencv4nodejs
+RUN npm install -g @u4/opencv4nodejs @tensorflow/tfjs-node @tensorflow/tfjs onnxruntime-node @tensorflow/tfjs-core long protobufjs seedrandom
 
 
 # Copy source files
