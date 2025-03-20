@@ -4,9 +4,10 @@
   "description": "A project to run OpenCV with Node.js in a Docker container.",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "install": "npm install",
-    "pm2": "pm2-runtime start app.json"
+    "start": "node app.js",
+    "postinstall": "node -e \"console.log('依赖安装完成')\"",
+    "pm2": "pm2-runtime start app.json",
+    "rebuild-tf": "npm rebuild @tensorflow/tfjs-node --build-from-source"
   },
   "dependencies": {},
   "engines": {
