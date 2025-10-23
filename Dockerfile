@@ -45,16 +45,19 @@ ENV NODE_PATH=/usr/lib/node_modules
 # 安装不依赖AVX的包
 RUN npm install -g @u4/opencv4nodejs onnxruntime-node long protobufjs seedrandom
 
-# 尝试安装TensorFlow，但允许失败
-RUN npm install -g @tensorflow/tfjs @tensorflow/tfjs-core || echo "TensorFlow JS Core installed without native bindings"
+# 安装TensorFlow完整套件（构建时全部安装，运行时根据CPU支持情况决定是否卸载）
+RUN npm install -g @tensorflow/tfjs @tensorflow/tfjs-core @tensorflow/tfjs-node
 
 # 创建检测CPU支持的脚本
 RUN echo '#!/bin/bash \n\
 if grep -q "avx" /proc/cpuinfo; then \n\
-  echo "AVX support detected, installing TensorFlow with native bindings" \n\
-  npm install -g @tensorflow/tfjs-node || echo "Failed to install TensorFlow native bindings" \n\
+  echo "AVX support detected, keeping TensorFlow native bindings" \n\
+  # 验证tfjs-node是否正常工作 \n\
+  node -e "try { require(\"@tensorflow/tfjs-node\"); console.log(\"TensorFlow native bindings working\"); } catch(e) { console.log(\"TensorFlow native bindings failed:\", e.message); npm.uninstall(\"@tensorflow/tfjs-node\"); }" 2>/dev/null || echo "Verification completed" \n\
 else \n\
-  echo "No AVX support detected, skipping TensorFlow native bindings" \n\
+  echo "No AVX support detected, removing TensorFlow native bindings" \n\
+  npm uninstall -g @tensorflow/tfjs-node 2>/dev/null || echo "tfjs-node removed" \n\
+  echo "Using TensorFlow.js in CPU-only mode" \n\
 fi' > /check-cpu.sh && chmod +x /check-cpu.sh
 
 # 在启动时运行检测脚本
