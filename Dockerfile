@@ -32,6 +32,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
 # Install PM2
 RUN npm install -g pm2
 
+# 创建应用用户避免权限问题
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
 # Set working directory
 WORKDIR /app
 
@@ -46,7 +49,11 @@ ENV NODE_PATH=/usr/lib/node_modules
 RUN npm install -g @u4/opencv4nodejs onnxruntime-node long protobufjs seedrandom
 
 # 安装TensorFlow完整套件（构建时全部安装，运行时根据CPU支持情况决定是否卸载）
-RUN npm install -g @tensorflow/tfjs @tensorflow/tfjs-core @tensorflow/tfjs-node
+# 修复权限问题，设置正确的文件权限
+RUN npm install -g @tensorflow/tfjs @tensorflow/tfjs-core @tensorflow/tfjs-node && \
+    find /usr/lib/node_modules -name "*.node" -exec chmod 755 {} \; && \
+    find /usr/lib/node_modules -type f -exec chmod 644 {} \; && \
+    find /usr/lib/node_modules -type d -exec chmod 755 {} \;
 
 # 创建检测CPU支持的脚本
 RUN echo '#!/bin/bash \n\
@@ -68,6 +75,13 @@ exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
 # Copy source files
 COPY app.js ./
 COPY app.json ./
+
+# 修复文件所有权
+RUN chown -R appuser:appuser /app && \
+    chmod +x /check-cpu.sh /entrypoint.sh
+
+# 切换到非root用户
+USER appuser
 
 # Expose the application port (if needed)
 EXPOSE 6777
